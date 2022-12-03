@@ -1,13 +1,24 @@
+let canvas;
+let ctx;
+let flowField;
 window.onload = function() {
-    const canvas = document.getElementById("canvas_1")
-    const ctx = canvas.getContext('2d');
+    canvas = document.getElementById("canvas_1")
+    ctx = canvas.getContext('2d');
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
  
-    const flowField = new FlowFieldEffect(ctx, canvas.width, canvas.height)
+    flowField = new FlowFieldEffect(ctx, canvas.width, canvas.height)
     flowField.animate();
 }
+
+
+window.addEventListener("resize", function (){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    flowField = new FlowFieldEffect(ctx, canvas.width, canvas.height)
+    flowField.animate();
+});
 
 class FlowFieldEffect{
     #ctx;
@@ -25,8 +36,8 @@ class FlowFieldEffect{
     }
 
     #draw(x, y){
-        const length = 500;
-        this.#ctx.strokeStyle='White';
+        const length = 300;
+        this.#ctx.strokeStyle='red';
         this.#ctx.beginPath();
         this.#ctx.moveTo(x, y);
         this.#ctx.lineTo(x+length, y+length);
@@ -34,8 +45,10 @@ class FlowFieldEffect{
     }
 
     animate(){
+        this.#ctx.clearRect(0, 0, this.#width, this.#height);
+        
         this.#draw(this.x,this.y);
-        this.x += 1;
+        this.x += 0.5;
         this.y += 0.5;
         console.log("animating")
         requestAnimationFrame(this.animate.bind(this))
