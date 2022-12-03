@@ -20,7 +20,17 @@ class FlowFieldEffect{
         this.#height = height;
 
         console.log("effect loaded")
+
+        this.#ctx.strokeStyle='White';
+        
+        this.#draw(100,100)
     }
 
+    #draw(x, y){
+        this.#ctx.beginPath();
+        this.#ctx.moveTo(x, y);
+        this.#ctx.lineTo(x+100, y+100);
+        this.#ctx.stroke();
+    }
 
 }
