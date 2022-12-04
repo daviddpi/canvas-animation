@@ -11,7 +11,7 @@ window.onload = function() {
     canvas.height = window.innerHeight;
  
     flowField = new FlowFieldEffect(ctx, canvas.width, canvas.height)
-    flowField.animate();
+    flowField.animate(0);
 }
 
 
@@ -20,7 +20,7 @@ window.addEventListener("resize", function (){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     flowField = new FlowFieldEffect(ctx, canvas.width, canvas.height)
-    flowField.animate();
+    flowField.animate(0);
 });
 
 const mouse = {
@@ -33,6 +33,11 @@ window.addEventListener("mousemove", function (e){
     mouse.y = e.y;
 })
 
+const setBg = () => {
+    const randomColor = Math.floor(Math.random()*16777215).toString(16);
+    return "#" + randomColor;
+}
+
 class FlowFieldEffect{
     #ctx;
     #width;
@@ -43,12 +48,17 @@ class FlowFieldEffect{
         this.#ctx = ctx;
         this.#width = width;
         this.#height = height;
-        this.angle = 0;
+        // this.angle = 0;
+        this.lastTime = 0;
+        this.interval = 1000/144;
+        this.timer = 0;
+        this.cellSize = 15;
     }
 
-    #draw(x, y){
-        const length = 300;
-        this.#ctx.strokeStyle='red';
+    #drawLine(x, y){
+        // this.#ctx.strokeStyle = setBg();
+        this.#ctx.strokeStyle = "red";
+
         this.#ctx.lineWidth = 1;
         
         this.#ctx.beginPath();
@@ -57,13 +67,24 @@ class FlowFieldEffect{
         this.#ctx.stroke();
     }
 
-    animate(){
+    animate(timeStamp){
 
-        this.angle += 0.1;
+        const deltaTime = timeStamp - this.lastTime;
+        this.lastTime = timeStamp;
 
-        this.#ctx.clearRect(0, 0, this.#width, this.#height);
-        
-        this.#draw(this.#width/2 + Math.sin(this.angle) * 100,this.#height / 2 + Math.cos(this.angle) * 100);
+        if(this.timer > this.interval){
+
+            // this.angle += 0.1;
+    
+            this.#ctx.clearRect(0, 0, this.#width, this.#height);
+            // this.#draw(this.#width/2 + Math.sin(this.angle) * 100 ,this.#height / 2 + Math.cos(this.angle) * 100 );
+            this.#drawLine(this.#width/2,this.#height / 2);
+            this.timer = 0;
+        } else{
+            this.timer += deltaTime;
+        }
+
+
        
         // console.log("animating")
         flowFieldAnimation = requestAnimationFrame(this.animate.bind(this))
