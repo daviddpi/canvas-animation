@@ -53,17 +53,18 @@ class FlowFieldEffect{
         this.interval = 1000/144;
         this.timer = 0;
         this.cellSize = 15;
+        this.gradient;
     }
 
     #drawLine(x, y){
         // this.#ctx.strokeStyle = setBg();
-        this.#ctx.strokeStyle = "red";
+        this.#ctx.strokeStyle = "white";
 
         this.#ctx.lineWidth = 1;
         
         this.#ctx.beginPath();
         this.#ctx.moveTo(x, y);
-        this.#ctx.lineTo(mouse.x, mouse.y);
+        this.#ctx.lineTo(x + 5 , y + 5);
         this.#ctx.stroke();
     }
 
@@ -75,10 +76,16 @@ class FlowFieldEffect{
         if(this.timer > this.interval){
 
             // this.angle += 0.1;
-    
             this.#ctx.clearRect(0, 0, this.#width, this.#height);
+
+
+            for(let y = 0; y < this.#height; y += this.cellSize){
+                for(let x = 0; x < this.#width; x += this.cellSize){
+                    this.#drawLine(x,y);
+
+                }
+            }
             // this.#draw(this.#width/2 + Math.sin(this.angle) * 100 ,this.#height / 2 + Math.cos(this.angle) * 100 );
-            this.#drawLine(this.#width/2,this.#height / 2);
             this.timer = 0;
         } else{
             this.timer += deltaTime;
