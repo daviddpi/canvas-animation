@@ -64,13 +64,13 @@ class FlowFieldEffect{
         this.gradient.addColorStop("0.9", '#ffff33');
     }
 
-    #drawLine(x, y){
+    #drawLine(angle, x, y){
 
         this.#ctx.lineWidth = 1;
         
         this.#ctx.beginPath();
         this.#ctx.moveTo(x, y);
-        this.#ctx.lineTo(x + 2 , y + 3);
+        this.#ctx.lineTo(x + Math.cos(angle) * 10 , y + Math.sin(angle) * 10);
         this.#ctx.stroke();
     }
 
@@ -87,11 +87,10 @@ class FlowFieldEffect{
 
             for(let y = 0; y < this.#height; y += this.cellSize){
                 for(let x = 0; x < this.#width; x += this.cellSize){
-                    this.#drawLine(x ,y);
-
+                    const angle = Math.cos(x * 0.05) + Math.sin(y * 0.05);
+                    this.#drawLine(angle, x, y);
                 }
             }
-            // this.#draw(this.#width/2 + Math.sin(this.angle) * 100 ,this.#height / 2 + Math.cos(this.angle) * 100 );
             this.timer = 0;
         } else{
             this.timer += deltaTime;
