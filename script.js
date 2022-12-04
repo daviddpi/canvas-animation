@@ -59,20 +59,31 @@ class FlowFieldEffect{
     #createGradient(){
         this.gradient = this.#ctx.createLinearGradient(0, 0, this.#width, this.#height);
         this.gradient.addColorStop("0.1", '#ff5c33');
-        this.gradient.addColorStop("0.2", '#ff56b3');
+        this.gradient.addColorStop("0.3", '#ff56b3');
         this.gradient.addColorStop("0.4", '#ccccff');
-        this.gradient.addColorStop("0.6", '#b3ffff');
+        this.gradient.addColorStop("0.7", '#b3ffff');
         this.gradient.addColorStop("0.8", '#80ff80');
         this.gradient.addColorStop("0.9", '#ffff33');
     }
 
     #drawLine(angle, x, y){
 
+        let positionX = x;
+        let positionY = y;
+
+        let dx = mouse.x - positionX;
+        let dy = mouse.y - positionY;
+
+
+        let distance = dx*dx + dy*dy;
+        let length = distance * 0.0001;
+
+        if(distance > 600000) distance = 600000;
+        else if (distance > 50000) distance = 50000;
         this.#ctx.lineWidth = 1;
-        
         this.#ctx.beginPath();
         this.#ctx.moveTo(x, y);
-        this.#ctx.lineTo(x + Math.cos(angle) * 30 , y + Math.sin(angle) * 30);
+        this.#ctx.lineTo(x + Math.cos(angle) * length , y + Math.sin(angle) * length);
         this.#ctx.stroke();
     }
 
@@ -83,7 +94,6 @@ class FlowFieldEffect{
 
         if(this.timer > this.interval){
 
-            // this.angle += 0.1;
             this.#ctx.clearRect(0, 0, this.#width, this.#height);
             this.radius += this.vr;
             if(this.radius > 5 || this.radius < -5){
@@ -91,7 +101,7 @@ class FlowFieldEffect{
             }
             for(let y = 0; y < this.#height; y += this.cellSize){
                 for(let x = 0; x < this.#width; x += this.cellSize){
-                    const angle = (Math.cos(x * 0.01) + Math.sin(y * 0.01)) * this.radius;
+                    const angle = (Math.cos(mouse.x * x * 0.00005) + Math.sin(mouse.y * y * 0.00005)) * this.radius;
                     this.#drawLine(angle, x, y);
                 }
             }
